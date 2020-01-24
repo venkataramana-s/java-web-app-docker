@@ -39,6 +39,6 @@ node
     }
     **/
     stage("Deploy to K8S Cluster"){
-        sh "kubectl apply -f "
+        sh "kubectl apply -f javawebapp.deployment.yml"
     }
 }
