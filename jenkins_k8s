@@ -18,14 +18,14 @@ node
         enableConfigSubstitution: true
         }
      stage("Build Docker Image"){
-    sh "docker build -t venkataramana7722/java ."
+    sh "docker build -t venkataramana7722/java-web-app ."
     }
     stage("Docker Push")
     {
         withCredentials([string(credentialsId: '083d5e8c-db5f-4d1d-8bf5-bf5de1dbd9a9', variable: 'Docker_Hub_Credentails')]) {
          sh "docker login -u venkataramana7722 -p ${Docker_Hub_Credentails}"
 }
-         sh "docker push venkataramana7722/spring-boot-mongo:1"
+         sh "docker push venkataramana7722/java-web-app"
     }
     /**
     stage("Deploy Application in K8S Cluster")
@@ -39,6 +39,6 @@ node
     }
     **/
     stage("Deploy to K8S Cluster"){
-        sh "kubectl apply -f springBootMongo.yml"
+        sh "kubectl apply -f "
     }
 }
