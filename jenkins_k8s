@@ -1,1 +1,44 @@
-
+node 
+{
+ def mavenHome = tool name: "maven-3.6.3" , type: "maven"
+    stage("Git Clone")
+    {
+       
+    }
+    stage("Maven Clean Build")
+    {
+       
+        def mavenCMD  = "${mavenHome}/bin/mvn"
+        sh "${mavenCMD} clean package"
+    }
+    stage("Sonarqube Report")
+    {
+    def mavenCMD  = "${mavenHome}/bin/mvn"
+        sh "${mavenCMD} sonar:sonar"
+        enableConfigSubstitution: true
+        }
+     stage("Build Docker Image"){
+    sh "docker build -t venkataramana7722/spring-boot-mongo:1 ."
+    }
+    stage("Docker Push")
+    {
+        withCredentials([string(credentialsId: '083d5e8c-db5f-4d1d-8bf5-bf5de1dbd9a9', variable: 'Docker_Hub_Credentails')]) {
+         sh "docker login -u venkataramana7722 -p ${Docker_Hub_Credentails}"
+}
+         sh "docker push venkataramana7722/spring-boot-mongo:1"
+    }
+    /**
+    stage("Deploy Application in K8S Cluster")
+    {
+        kubernetesDeploy(
+            configs: 'springBootMongo.yml' ,
+            kubeconfigId: 'KUBERNETES_CLUSTER_CONFIG' ,
+            enableConfigSubstitution: true
+            
+            )
+    }
+    **/
+    stage("Deploy to K8S Cluster"){
+        sh "kubectl apply -f springBootMongo.yml"
+    }
+}
