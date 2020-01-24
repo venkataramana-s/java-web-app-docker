@@ -3,7 +3,7 @@ node
  def mavenHome = tool name: "maven-3.6.3" , type: "maven"
     stage("Git Clone")
     {
-       
+     git credentialsId: '384211d6-3088-4c12-afd6-e227a8af4fac', url: 'https://github.com/venkataramana-s/java-web-app-docker.git'  
     }
     stage("Maven Clean Build")
     {
@@ -18,7 +18,7 @@ node
         enableConfigSubstitution: true
         }
      stage("Build Docker Image"){
-    sh "docker build -t venkataramana7722/spring-boot-mongo:1 ."
+    sh "docker build -t venkataramana7722/java ."
     }
     stage("Docker Push")
     {
